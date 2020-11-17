@@ -8,7 +8,7 @@
 
 2) Classes    
     a. CLI - Interacts with user
-        -> Methods: #call
+        -> Methods: #call, #restaurant_category, #restaurant_list
     b. Restaurant - Stores data re: individual restaurants
         -> Methods: 
     c. Scraper - Collects data from the website
