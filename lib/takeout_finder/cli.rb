@@ -1,6 +1,10 @@
 class TakeoutFinder::CLI
   def call
-    puts "\nWelcome to Takeout Finder!\n"
+    puts "\nWelcome to Takeout Finder!"
+    puts "\nPlease enter your two-letter state code:"
+    state = gets.strip.downcase
+    puts "\nPlease enter your city name:"
+    city = gets.strip.downcase
     puts "Please choose a restaurant category by number:"
     get_restaurant_category
     category_list
@@ -10,8 +14,6 @@ class TakeoutFinder::CLI
   def get_restaurant_category
     # to be scraped later
     @category = TakeoutFinder::Category.all
-    TakeoutFinder::Category.new("Burgers")
-    TakeoutFinder::Category.new("Sushi")
 
   end
   

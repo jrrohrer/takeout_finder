@@ -1,0 +1,4 @@
+class TakeoutFinder::Scraper
+
+
+end
