@@ -8,25 +8,28 @@ class TakeoutFinder::CLI
   end
     
   def get_restaurant_category
-    #to be scraped later
-    @category = ["Pizza", "Hamburgers & Hot Dogs", "Chinese", "Mexican", "Chicken Wings", "Latin American", "Brewpubs", "Sushi", "Italian", "Farmers Market", "Burgers", "Takeout", "Food Trucks"]
+    # to be scraped later
+    @category = TakeoutFinder::Category.all
+    TakeoutFinder::Category.new("Burgers")
+    TakeoutFinder::Category.new("Sushi")
+
   end
   
   def category_list
-    #list restaurant objects by category
+    # list restaurant objects by category
     @category.each_with_index do |cuisine, index|
-      puts "#{index+1}. #{cuisine}"
+      puts "#{index+1}. #{cuisine.name}"
     end
   end
   
   def get_user_category
-    #gets user's category selection and displays list of restaurants in chosen category
+    # gets user's category selection and displays list of restaurants in chosen category
     category_selection = gets.strip.to_i
     display_restaurants(category_selection) if valid_input(category_selection, @category)
   end
   
   def restaurant_detail
-    #puts restaurant details (name, location, phone number, description)
+    # puts restaurant details (name, location, phone number, description)
   end
   
   def valid_input(input, array)
@@ -35,6 +38,6 @@ class TakeoutFinder::CLI
 
   def display_restaurants(category_selection)
     cuisine = @category[category_selection-1]
-    puts "Here are the local #{cuisine} restaurants:"
+    puts "Here are the local #{cuisine.name} restaurants:"
   end
 end
