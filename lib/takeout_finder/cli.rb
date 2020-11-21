@@ -1,11 +1,11 @@
 class TakeoutFinder::CLI
   def call
-    puts "\nWelcome to Takeout Finder!"
-    puts "\nPlease enter your two-letter state code:"
+    puts "\nWelcome to Takeout Finder!".colorize(:blue)
+    puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
     state = gets.strip.downcase
-    puts "\nPlease enter your city name:"
+    puts "\nPlease enter your city name:".colorize(:light_blue)
     city = gets.strip.downcase
-    puts "Please choose a restaurant category by number:"
+    puts "Please choose a restaurant category by number:".colorize(:light_blue)
     get_restaurant_category
     category_list
     get_user_category

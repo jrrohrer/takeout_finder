@@ -5,6 +5,7 @@ require_relative "./takeout_finder/category"
 require_relative "./takeout_finder/scraper"
 
 require 'pry'
+require 'colorize'
 
 module TakeoutFinder
   class Error < StandardError; end
