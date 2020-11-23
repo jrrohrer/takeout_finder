@@ -1,11 +1,16 @@
+# responsible for finding and returning all available restaurant categories in the user's provided location
+# category has many restaurants
+# should know of all category objects with no duplicates
+# should know of all restaurants in each category
+
 class TakeoutFinder::Category
-    attr_accessor :name, :restaurants
+    attr_accessor :name, :restaurant
 
     @@all = []
 
     def initialize(name)
         @name = name
-        save
+        @@all << self
     end
 
     def self.all
@@ -13,12 +18,8 @@ class TakeoutFinder::Category
     end
 
     def restaurants
-        # creates array of restaurant objects with a category that match the category instance
+        # creates array of restaurant objects with a category that matches the category instance.
         Restaurant.all.select {|restaurant| restaurant.category == self}
-    end
-
-    def save
-        @@all << self
     end
 
     def puts_category
