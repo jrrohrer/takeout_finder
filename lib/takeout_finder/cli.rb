@@ -1,6 +1,16 @@
 class TakeoutFinder::CLI
 
   def call
+    query
+    get_restaurant_category
+    category_list
+    get_category_selection
+    get_restaurant_selection
+    what_next 
+  end
+
+  def query
+    # gets user input and runs the scraper calls
     puts "\nWelcome to Takeout Finder!".colorize(:light_blue)
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
     state = gets.strip.downcase
@@ -9,38 +19,7 @@ class TakeoutFinder::CLI
     scraper = TakeoutFinder::Scraper.new(state, city)
     scraper.scrape_categories
     scraper.scrape_restaurant_details
-    get_restaurant_category
-    category_list
-    get_category_selection
-    get_restaurant_selection
-    what_next 
   end
-
-
-=begin
-#these two methods are for debugging in vs code. they bypass the user input lines. 
-  def call_debugging
-    puts "\nWelcome to Takeout Finder!".colorize(:Green)
-    puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
-    state = "pa"
-    puts "\nPlease enter your city name:".colorize(:light_blue)
-    city = "elizabethtown"
-
-    query(state, city)
-  end
-
-  def query(state, city)
-    scraper = TakeoutFinder::Scraper.new(state, city)
-    scraper.scrape_categories
-    scraper.scrape_restaurant_details
-    puts "Please choose a restaurant category by number:".colorize(:light_blue)
-    get_restaurant_category
-    category_list
-    get_category_selection
-    get_restaurant_selection
-    what_next 
-  end
-=end
     
   def get_restaurant_category
     # gets category objects for local restaurants
@@ -50,9 +29,7 @@ class TakeoutFinder::CLI
   
   def category_list
     # display list of restaurant categories
-    @category.each_with_index do |cuisine, index|
-      puts "#{index+1}. #{cuisine.name}"
-    end
+    @category.each_with_index {|cuisine, index| puts "#{index+1}. #{cuisine.name}"}
   end
 
   def valid_input(input, array)
@@ -70,9 +47,7 @@ class TakeoutFinder::CLI
     category = @category[category_selection-1]
     @options = category.restaurants
     puts "\nHere are the restaurants in that category:".colorize(:light_blue)
-    @options.each_with_index do |restaurant, index|
-      puts "#{index+1}. #{restaurant.name}"
-    end
+    @options.each_with_index {|restaurant, index| puts "#{index+1}. #{restaurant.name}"}
   end
 
   def get_restaurant_selection
@@ -101,7 +76,7 @@ class TakeoutFinder::CLI
       TakeoutFinder::CLI.new.call
     elsif input == "n"
       puts "\nThanks for using Takeout Finder! Enjoy your meal!".colorize(:light_blue)
-    else
+    elsif input != "y" && input != "n"
       "Please enter 'y' to start over or 'n' to exit."
       what_next
     end
