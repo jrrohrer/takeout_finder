@@ -1,28 +1,21 @@
-# responsible for user interface
-# gets user input for URL to scrape
-# returns list of available restaurant categories
-# gets user choice of category
-# returns list of restaurants in that category
-# gets user choice of restaurant
-# returns details for that restaurant (name, address, phone number, description, url?)
-# asks if user would like to start over, or else exit
-
 class TakeoutFinder::CLI
 
-
   def call
-    puts "\nWelcome to Takeout Finder!".colorize(:Green)
+    puts "\nWelcome to Takeout Finder!".colorize(:light_blue)
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
     state = gets.strip.downcase
-    puts "\nPlease enter your city name:".colorize(:light_blue)
-    city = gets.strip.downcase
+    puts "\nPlease enter your city name (Don't forget to double-check your spelling!):".colorize(:light_blue)
+    city = gets.strip.downcase.gsub(" ", "-")
     scraper = TakeoutFinder::Scraper.new(state, city)
     scraper.scrape_categories
-    puts "Please choose a restaurant category by number:".colorize(:light_blue)
-
-    #query(state, city)
+    scraper.scrape_restaurant_details
+    get_restaurant_category
+    category_list
+    get_category_selection
+    
   end
-
+=begin
+these two methods are for debugging in vs code. they bypass the user input lines. 
   def call_debugging
     puts "\nWelcome to Takeout Finder!".colorize(:Green)
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
@@ -36,28 +29,20 @@ class TakeoutFinder::CLI
   def query(state, city)
     scraper = TakeoutFinder::Scraper.new(state, city)
     scraper.scrape_categories
+    scraper.scrape_restaurant_details
     puts "Please choose a restaurant category by number:".colorize(:light_blue)
     get_restaurant_category
-    scraper.scrape_restaurant_details
+    
 
     category_list
-    get_user_category
-
-
-
-
-
-
-
-
-
-
+    get_category_selection
 
   end
-
+=end
     
   def get_restaurant_category
-    # to be scraped later; gets category objects for local restaurants
+    # gets category objects for local restaurants
+    puts "\nPlease choose a restaurant category by number:".colorize(:light_blue)
     @category = TakeoutFinder::Category.all
   end
   
@@ -72,13 +57,21 @@ class TakeoutFinder::CLI
     input.to_i <= array.length && input.to_i > 0
   end
   
-  def get_user_category
+  def get_category_selection
     # gets user's category selection and displays list of restaurants in chosen category if input is valid
-    @category_selection = 5 # gets.strip.to_i
-    restaurant_list(@category_selection) if valid_input(@category_selection, @category)
+    category_selection = gets.strip.to_i
+    restaurant_list(category_selection) if valid_input(category_selection, @category)
   end
 
-  
+  def restaurant_list(category_selection)
+    # lists restaurants in the user's chosen category
+    category = @category[category_selection-1]
+    category.restaurants
+    puts "\nHere are the restaurants in that category:".colorize(:light_blue)
+    category.restaurants.each_with_index do |restaurant, index|
+      puts "#{index+1}. #{restaurant.name}"
+    end
+  end
 
 
 

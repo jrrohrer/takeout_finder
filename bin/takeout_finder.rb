@@ -2,4 +2,4 @@
 
 require_relative '../lib/environment'
 
-TakeoutFinder::CLI.new.call_debugging
+TakeoutFinder::CLI.new.call
