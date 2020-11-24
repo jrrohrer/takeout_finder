@@ -18,11 +18,4 @@ class TakeoutFinder::Category
             restaurant.category == self.name
         end
     end
-
-    #def puts_category
-        # puts out all the restaurants in the category
-        #restaurants.each do |restaurant| 
-            #puts restaurant.name
-        #end
-    #end
 end

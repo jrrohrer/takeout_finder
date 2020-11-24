@@ -12,10 +12,13 @@ class TakeoutFinder::CLI
     get_restaurant_category
     category_list
     get_category_selection
-    
+    get_restaurant_selection
+    what_next 
   end
+
+
 =begin
-these two methods are for debugging in vs code. they bypass the user input lines. 
+#these two methods are for debugging in vs code. they bypass the user input lines. 
   def call_debugging
     puts "\nWelcome to Takeout Finder!".colorize(:Green)
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
@@ -32,11 +35,10 @@ these two methods are for debugging in vs code. they bypass the user input lines
     scraper.scrape_restaurant_details
     puts "Please choose a restaurant category by number:".colorize(:light_blue)
     get_restaurant_category
-    
-
     category_list
     get_category_selection
-
+    get_restaurant_selection
+    what_next 
   end
 =end
     
@@ -66,22 +68,40 @@ these two methods are for debugging in vs code. they bypass the user input lines
   def restaurant_list(category_selection)
     # lists restaurants in the user's chosen category
     category = @category[category_selection-1]
-    category.restaurants
+    @options = category.restaurants
     puts "\nHere are the restaurants in that category:".colorize(:light_blue)
-    category.restaurants.each_with_index do |restaurant, index|
+    @options.each_with_index do |restaurant, index|
       puts "#{index+1}. #{restaurant.name}"
     end
   end
 
+  def get_restaurant_selection
+    # gets user's restaurant selection and displays details for that restaurant.
+    puts "\nPlease select a restaurant by number for more details:".colorize(:light_blue)
+    restaurant_selection = gets.strip.to_i
+    restaurant = @options[restaurant_selection.to_i-1]
+    restaurant_detail(restaurant) if valid_input(restaurant_selection, @options)
+  end
 
-
-  def restaurant_detail(restaurant_selection)
+  def restaurant_detail(restaurant)
     # puts restaurant details (name, location, phone number, description)
-    puts "Here are the details for your chosen restaurant:".colorize(:light_blue)
-    puts "#{restaurant_selection.name}"
-    puts "#{restaurant_selection.address}"
-    puts "#{restaurant_selection.phone}"
-    puts "#{restaurant_selection.description}"
-    puts "#{restaurant_selection.url}"
+    puts "\nHere are the details for your chosen restaurant:".colorize(:light_blue)
+    puts "Name: #{restaurant.name}"
+    puts "Address: #{restaurant.address}"
+    puts "Phone: #{restaurant.phone}"
+    puts "Review: #{restaurant.description}"
+  end
+
+  def what_next
+    puts "\nWould you like to start over? y/n".colorize(:light_blue)
+    input = gets.strip.downcase
+    if input == "y"
+      TakeoutFinder::CLI.new.call
+    elsif input == "n"
+      puts "\nThanks for using Takeout Finder! Enjoy your meal!".colorize(:light_blue)
+    else
+      "Please enter 'y' to start over or 'n' to exit."
+      what_next
+    end
   end
 end
