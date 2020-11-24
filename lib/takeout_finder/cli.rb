@@ -8,30 +8,57 @@
 # asks if user would like to start over, or else exit
 
 class TakeoutFinder::CLI
+
+
   def call
     puts "\nWelcome to Takeout Finder!".colorize(:Green)
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
     state = gets.strip.downcase
     puts "\nPlease enter your city name:".colorize(:light_blue)
     city = gets.strip.downcase
+    scraper = TakeoutFinder::Scraper.new(state, city)
+    scraper.scrape_categories
+    puts "Please choose a restaurant category by number:".colorize(:light_blue)
+
+    #query(state, city)
+  end
+
+  def call_debugging
+    puts "\nWelcome to Takeout Finder!".colorize(:Green)
+    puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
+    state = "pa"
+    puts "\nPlease enter your city name:".colorize(:light_blue)
+    city = "elizabethtown"
+
+    query(state, city)
+  end
+
+  def query(state, city)
+    scraper = TakeoutFinder::Scraper.new(state, city)
+    scraper.scrape_categories
     puts "Please choose a restaurant category by number:".colorize(:light_blue)
     get_restaurant_category
+    scraper.scrape_restaurant_details
+
     category_list
     get_user_category
-    restaurant_list(@category_selection)
-    get_user_restaurant
-    restaurant_detail
-    puts "\nWhat would you like to do next?"
-    puts  "\nEnter 'again' to start over or 'exit' if you are finished."
+
+
+
+
+
+
+
+
+
+
+
   end
+
     
   def get_restaurant_category
     # to be scraped later; gets category objects for local restaurants
     @category = TakeoutFinder::Category.all
-    TakeoutFinder::Category.new("Burgers")
-    TakeoutFinder::Category.new("Sushi")
-    TakeoutFinder::Category.new("Tacos")
-
   end
   
   def category_list
@@ -47,21 +74,13 @@ class TakeoutFinder::CLI
   
   def get_user_category
     # gets user's category selection and displays list of restaurants in chosen category if input is valid
-    @category_selection = gets.strip.to_i
+    @category_selection = 5 # gets.strip.to_i
     restaurant_list(@category_selection) if valid_input(@category_selection, @category)
   end
 
-  def restaurant_list(category_selection)
-    cuisine = @category[@category_selection-1]
-    puts "Please choose a restaurant by number:".colorize(:light_blue)
-    @restaurants = TakeoutFinder::Category.restaurants
-  end
+  
 
-  def get_user_restaurant
-    # gets user's restaurant selection 
-    restaurant_selection = gets.strip.to_i
-    restaurant_detail(restaurant_selection) if valid_input(restaurant_selection, @restaurants)
-  end
+
 
   def restaurant_detail(restaurant_selection)
     # puts restaurant details (name, location, phone number, description)

@@ -17,12 +17,12 @@ class TakeoutFinder::Category
         @@all
     end
 
-    def restaurants
+    def self.restaurants
         # creates array of restaurant objects with a category that matches the category instance.
         Restaurant.all.select {|restaurant| restaurant.category == self}
     end
 
-    def puts_category
+    def self.puts_category
         # puts out all the restaurants in the category
         restaurants.each {|restaurant| puts restaurant.name}
     end

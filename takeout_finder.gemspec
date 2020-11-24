@@ -39,6 +39,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "pry"
+  spec.add_development_dependency "debase"
+  spec.add_development_dependency "ruby-debug-ide"
+  spec.add_development_dependency "readapt"
   spec.add_dependency "nokogiri"
   spec.add_dependency "colorize", "~> 0.7.7"
 end

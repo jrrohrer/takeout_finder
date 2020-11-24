@@ -4,17 +4,16 @@
 
 
 class TakeoutFinder::Restaurant
-    attr_accessor :name, :category, :address, :phone, :description, :url
+    attr_accessor :name, :category, :address, :phone, :description
 
     @@all = []
 
-    def initialize(name, category, address=nil, phone=nil, decription=nil, url=nil)
+    def initialize(name, category, address=nil, phone=nil, description=nil)
         @name = name
         @category = category
         @address = address
         @phone = phone
         @description = description
-        @url = url
         @@all << self
     end
 
@@ -38,7 +37,4 @@ class TakeoutFinder::Restaurant
         # description text from scraper
     end
 
-    def url 
-        # url data from scraper
-    end
 end
