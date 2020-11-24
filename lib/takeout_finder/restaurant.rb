@@ -16,6 +16,10 @@ class TakeoutFinder::Restaurant
         @@all
     end
 
+    def self.clear
+        @@all.clear
+    end
+
     def self.find_by_name(name)
         # find user's selected object
     end

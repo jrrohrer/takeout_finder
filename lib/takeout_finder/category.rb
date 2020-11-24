@@ -12,6 +12,10 @@ class TakeoutFinder::Category
         @@all
     end
 
+    def self.clear
+        @@all.clear
+    end
+
     def restaurants
         # creates array of restaurant objects with a category that matches the category instance.
         TakeoutFinder::Restaurant.all.select do |restaurant| 

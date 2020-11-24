@@ -96,6 +96,8 @@ class TakeoutFinder::CLI
     puts "\nWould you like to start over? y/n".colorize(:light_blue)
     input = gets.strip.downcase
     if input == "y"
+      TakeoutFinder::Restaurant.clear
+      TakeoutFinder::Category.clear
       TakeoutFinder::CLI.new.call
     elsif input == "n"
       puts "\nThanks for using Takeout Finder! Enjoy your meal!".colorize(:light_blue)
