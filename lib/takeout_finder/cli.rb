@@ -1,12 +1,15 @@
 class TakeoutFinder::CLI
 
   def call
-    query
-    get_restaurant_category
-    category_list
-    get_category_selection
-    get_restaurant_selection
-    what_next 
+    @input = ""
+    until @input == "exit"
+      query
+      restaurant_category
+      category_list
+      get_category_selection
+      get_restaurant_selection
+      what_next
+    end
   end
 
   def query
@@ -14,8 +17,10 @@ class TakeoutFinder::CLI
     puts "\nWelcome to Takeout Finder!".colorize(:light_blue)
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
     state = gets.strip.downcase
+    exit if state == "exit"
     puts "\nPlease enter your city name (Don't forget to double-check your spelling!):".colorize(:light_blue)
     city = gets.strip.downcase.gsub(" ", "-")
+    exit if city == "exit"
     scraper = TakeoutFinder::Scraper.new(state, city)
     scraper.scrape_categories
     scraper.scrape_restaurant_details
@@ -35,7 +40,7 @@ class TakeoutFinder::CLI
     end
   end
 
-  def get_restaurant_category
+  def restaurant_category
     # gets category objects for local restaurants
     puts "\nPlease choose a restaurant category by number:".colorize(:light_blue)
     @category = TakeoutFinder::Category.all
@@ -47,13 +52,14 @@ class TakeoutFinder::CLI
   end
 
   def valid_input(input, array)
+    exit if input == "exit"
     input.to_i <= array.length && input.to_i > 0
   end
   
   def get_category_selection
     # gets user's category selection and displays list of restaurants in chosen category if input is valid
-    category_selection = gets.strip.to_i
-    restaurant_list(category_selection) if valid_input(category_selection, @category)
+    @input = gets.strip
+    restaurant_list(@input.to_i) if valid_input(@input, @category)
   end
 
   def restaurant_list(category_selection)
@@ -67,9 +73,11 @@ class TakeoutFinder::CLI
   def get_restaurant_selection
     # gets user's restaurant selection and displays details for that restaurant.
     puts "\nPlease select a restaurant by number for more details:".colorize(:light_blue)
-    restaurant_selection = gets.strip.to_i
-    restaurant = @options[restaurant_selection.to_i-1]
-    restaurant_detail(restaurant) if valid_input(restaurant_selection, @options)
+    @input = gets.strip
+    if valid_input(@input, @options)
+      restaurant = @options[@input.to_i-1]
+    end
+    restaurant_detail(restaurant)
   end
 
   def restaurant_detail(restaurant)
@@ -83,14 +91,15 @@ class TakeoutFinder::CLI
 
   def what_next
     puts "\nWould you like to start over? y/n".colorize(:light_blue)
-    input = gets.strip.downcase
-    if input == "y"
+    @input = gets.strip.downcase
+    if @input == "y"
       TakeoutFinder::Restaurant.clear
       TakeoutFinder::Category.clear
       TakeoutFinder::CLI.new.call
-    elsif input == "n"
+    elsif @input == "n"
       puts "\nThanks for using Takeout Finder! Enjoy your meal!".colorize(:light_blue)
-    elsif input != "y" && input != "n"
+      exit
+    elsif @input != "y" && @input != "n"
       puts "Please enter 'y' to start over or 'n' to exit.".colorize(:light_blue)
       what_next
     end
