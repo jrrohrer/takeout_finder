@@ -19,8 +19,22 @@ class TakeoutFinder::CLI
     scraper = TakeoutFinder::Scraper.new(state, city)
     scraper.scrape_categories
     scraper.scrape_restaurant_details
+    if TakeoutFinder::Category.all == []
+      begin
+        raise SearchError
+      rescue SearchError => error
+        puts error.message
+        exit
+      end
+    end
   end
     
+  class SearchError < StandardError
+    def message
+      puts "\nThere was a problem with your search. Please check your state code and city name spelling and start again.".colorize(:light_blue)
+    end
+  end
+
   def get_restaurant_category
     # gets category objects for local restaurants
     puts "\nPlease choose a restaurant category by number:".colorize(:light_blue)
@@ -77,7 +91,7 @@ class TakeoutFinder::CLI
     elsif input == "n"
       puts "\nThanks for using Takeout Finder! Enjoy your meal!".colorize(:light_blue)
     elsif input != "y" && input != "n"
-      "Please enter 'y' to start over or 'n' to exit."
+      puts "Please enter 'y' to start over or 'n' to exit.".colorize(:light_blue)
       what_next
     end
   end
