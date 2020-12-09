@@ -12,12 +12,10 @@ class TakeoutFinder::Scraper
 
     def scrape_categories
         doc = Nokogiri::HTML(URI.open(@site_url))
-        category_array = []
         category_elements = doc.css(".strip.grid").children.css("figure").children.css("small")
-        category_elements.each do | element |
-            category_array << element.text
-        end
-        category_array.uniq.each do |category|
+        category_elements.map do | element |
+            element.text
+        end.uniq.each do |category|
             TakeoutFinder::Category.new(category)
         end
     end

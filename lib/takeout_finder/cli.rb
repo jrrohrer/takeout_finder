@@ -14,7 +14,11 @@ class TakeoutFinder::CLI
 
   def query
     # gets user input and runs the scraper calls
-    puts "\nWelcome to Takeout Finder!".colorize(:light_blue)
+    puts "----------------------------------"
+    puts " "
+    puts "Welcome to Takeout Finder!".colorize(:light_blue)
+    puts " "
+    puts "----------------------------------"
     puts "\nPlease enter your two-letter state code:".colorize(:light_blue)
     state = gets.strip.downcase
     exit if state == "exit"
@@ -43,12 +47,12 @@ class TakeoutFinder::CLI
   def restaurant_category
     # gets category objects for local restaurants
     puts "\nPlease choose a restaurant category by number:".colorize(:light_blue)
-    @category = TakeoutFinder::Category.all
+    @categories = TakeoutFinder::Category.all.sort_by {|category| category.name}
   end
   
   def category_list
     # display list of restaurant categories
-    @category.each_with_index {|cuisine, index| puts "#{index+1}. #{cuisine.name}"}
+    @categories.each_with_index {|cuisine, index| puts "#{index+1}. #{cuisine.name}"}
   end
 
   def valid_input(input, array)
@@ -59,13 +63,13 @@ class TakeoutFinder::CLI
   def get_category_selection
     # gets user's category selection and displays list of restaurants in chosen category if input is valid
     @input = gets.strip
-    restaurant_list(@input.to_i) if valid_input(@input, @category)
+    restaurant_list(@input.to_i) if valid_input(@input, @categories)
   end
 
   def restaurant_list(category_selection)
     # lists restaurants in the user's chosen category
-    category = @category[category_selection-1]
-    @options = category.restaurants
+    category = @categories[category_selection-1]
+    @options = category.restaurants.sort_by {|restaurant| restaurant.name}
     puts "\nHere are the restaurants in that category:".colorize(:light_blue)
     @options.each_with_index {|restaurant, index| puts "#{index+1}. #{restaurant.name}"}
   end
